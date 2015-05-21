@@ -1,0 +1,13 @@
+server:
+    port: 8080
+
+logging:
+  level:
+    example: DEBUG
+
+spring:
+  datasource:
+    driverClassName: org.hsqldb.jdbc.JDBCDriver
+    url: jdbc:hsqldb:file:db/test
+    platform: hsql
+    initialize: false

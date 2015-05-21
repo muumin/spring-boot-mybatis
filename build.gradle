@@ -1,0 +1,69 @@
+buildscript {
+    repositories { jcenter() }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE"
+        classpath 'org.springframework:springloaded:1.2.3.RELEASE'
+        classpath 'org.hsqldb:hsqldb:2.3.2'
+        classpath 'org.flywaydb:flyway-gradle-plugin:3.2.1'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'groovy'
+apply plugin: 'idea'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'spring-boot'
+apply plugin: 'org.flywaydb.flyway'
+
+defaultTasks "clean", "build", "bootRun"
+
+def defaultEncoding = 'UTF-8'
+tasks.withType(AbstractCompile) each { it.options.encoding = defaultEncoding }
+tasks.withType(GroovyCompile) each { it.groovyOptions.encoding = defaultEncoding }
+
+project.ext {
+    artifactId = 'mybatis-boot'
+    springBootVersion = '1.2.3.RELEASE'
+}
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-aop:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
+    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
+
+    compile 'org.mybatis:mybatis:3.2.8'
+    compile 'org.mybatis:mybatis-spring:1.2.2'
+    compile 'org.flywaydb:flyway-core:3.2.1'
+    runtime 'org.hsqldb:hsqldb:2.3.2'
+
+    compile 'org.projectlombok:lombok:1.14.8'
+    compile 'org.apache.commons:commons-lang3:3.4'
+
+    testCompile 'org.codehaus.groovy:groovy-all:2.4.3'
+    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+}
+
+task wrapper(type: Wrapper) { gradleVersion = '2.4' }
+
+eclipse {
+    pathVariables GRADLE_REPO: file(System.properties['user.home'] + '/.gradle/cache')
+    wtp {
+        component {
+            contextPath = 'myapp'
+        }
+
+//        facet {
+//            facet name: 'java', version: '1.8'
+//            facet name: 'jst.web', version: '3.0'
+//        }
+    }
+}
+
+flyway {
+    url = 'jdbc:hsqldb:file:db/test'
+}
