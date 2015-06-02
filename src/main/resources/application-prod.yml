@@ -1,0 +1,9 @@
+server:
+    port: 10389
+
+spring:
+  datasource:
+    driverClassName: org.hsqldb.jdbc.JDBCDriver
+    url: jdbc:hsqldb:file:db/test_prod
+    platform: hsql
+    initialize: false

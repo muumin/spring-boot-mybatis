@@ -1,17 +1,16 @@
 package example.service;
 
 import example.mybatis.domain.User;
-
-import java.util.List;
+import example.web.result.BasicResult;
 
 public interface UserService {
-    List<User> getUsers();
+    BasicResult getUsers();
 
-    User getUser(String id);
+    BasicResult getUser(String id);
 
-    int deleteUser(String id);
+    BasicResult deleteUser(String id);
 
-    int addUser(User user);
+    BasicResult addUser(User user);
 
-    int updateUser(User user);
+    BasicResult updateUser(User user);
 }

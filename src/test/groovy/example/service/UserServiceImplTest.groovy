@@ -2,9 +2,9 @@ package example.service
 
 import example.BaseSpecification
 import example.mybatis.domain.User
+import example.web.result.BasicDataResult
 import org.springframework.beans.factory.annotation.Autowired
 import spock.lang.Unroll
-
 
 class UserServiceImplTest extends BaseSpecification {
     @Autowired
@@ -13,7 +13,8 @@ class UserServiceImplTest extends BaseSpecification {
     @Unroll
     def "getUser() loginId = #loginId"() {
         when:
-        User user = service.getUser(loginId)
+        BasicDataResult<User> ret = (BasicDataResult<User>) service.getUser(loginId)
+        User user = ret.getData()
 
         then:
         user.getName() == name

@@ -14,8 +14,9 @@ apply plugin: 'idea'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'spring-boot'
 apply plugin: 'org.flywaydb.flyway'
+apply plugin: 'jacoco'
 
-defaultTasks "clean", "build", "bootRun"
+defaultTasks "clean", "build", "jacocoTestReport"
 
 sourceCompatibility = '1.8'
 targetCompatibility = '1.8'
@@ -29,20 +30,6 @@ project.ext {
     springBootVersion = '1.2.3.RELEASE'
     groovyAllVersion = '2.4.3'
     spockVersion = '1.0-groovy-2.4'
-}
-
-configurations {
-    integTest.extendsFrom testRuntime
-    integTestCompile.extendsFrom testCompile
-}
-
-sourceSets {
-    integTest {
-        groovy.srcDir 'src/integTest/groovy'
-        resources.srcDir 'src/integTest/resources'
-        compileClasspath = sourceSets.main.output + sourceSets.test.output + configurations.integTest
-        runtimeClasspath = output + compileClasspath
-    }
 }
 
 repositories {
@@ -68,7 +55,7 @@ dependencies {
     testCompile "org.spockframework:spock-spring:$spockVersion"
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 
-    integTest 'com.github.groovy-wslite:groovy-wslite:1.0.0'
+    testCompile 'com.github.groovy-wslite:groovy-wslite:1.0.0'
 }
 
 task wrapper(type: Wrapper) { gradleVersion = '2.4' }
@@ -79,7 +66,6 @@ eclipse {
         component {
             contextPath = 'myapp'
         }
-
 //        facet {
 //            facet name: 'java', version: '1.8'
 //            facet name: 'jst.web', version: '3.0'
@@ -87,19 +73,28 @@ eclipse {
     }
 }
 
-idea {
-    module {
-        scopes.TEST.plus += [configurations.integTest]
-    }
-}
-
 flyway {
     url = 'jdbc:hsqldb:file:db/test'
 }
 
-task integTest(type: Test) {
-    testClassesDir = sourceSets.integTest.output.classesDir
-    classpath = sourceSets.integTest.runtimeClasspath
+jacoco {
+    toolVersion = '0.7.4.201502262128'
+    reportsDir = file("${project.buildDir}/reports/customJacocoReportDir")
 }
 
-check.dependsOn integTest
+jacocoTestReport {
+    reports {
+        xml.enabled false
+        csv.enabled false
+        html.destination "${project.buildDir}/reports/jacocoHtml"
+    }
+}
+
+bootRun {
+    // gradlew bootRun -Pargs="--spring.profiles.active=prod"
+    // で起動するとapplication.ymlの値にsrc/main/resources/application-prod.yml
+    // の値を上書きして稼働する
+    if (project.hasProperty('args')) {
+        args project.args.split('\\s+')
+    }
+}

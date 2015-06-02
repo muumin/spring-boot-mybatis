@@ -1,9 +1,7 @@
 package example.web;
 
-import example.mybatis.domain.User;
 import example.service.UserService;
 import example.web.form.UserForm;
-import example.web.result.BasicDataResult;
 import example.web.result.BasicResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,9 +12,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.format.DateTimeFormatter;
-import java.util.List;
-
 @RestController
 @RequestMapping("/users")
 @Slf4j
@@ -25,20 +20,16 @@ public class UserController {
     private UserService userService;
 
     @RequestMapping(value = "/", method = RequestMethod.GET)
-    List<User> read() {
+    BasicResult read() {
         return userService.getUsers();
     }
 
     @RequestMapping(value = "/{loginId}", method = RequestMethod.GET)
-    User read(@PathVariable String loginId) {
-        User user = userService.getUser(loginId);
-        if (user != null) {
-            // 日付をLocalDateTimeで整形したいなら以下
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
-            log.debug("{}.create={}", user.getLoginId(), user.getCreated().format(formatter));
-        }
-
-        return user;
+    BasicResult read(@PathVariable String loginId) {
+        return userService.getUser(loginId);
+        // 日付をLocalDateTimeで整形したいなら以下
+//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
+//            log.debug("{}.create={}", user.getLoginId(), user.getCreated().format(formatter));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
@@ -47,50 +38,27 @@ public class UserController {
         if (result.getStatus() == BasicResult.Status.ERROR) {
             return result;
         }
-
-        User user = userForm.getUser();
-        userService.addUser(user);
-        BasicDataResult<User> dataResult = new BasicDataResult<>();
-        dataResult.setData(user);
-        dataResult.addMessage(String.format("id:%d", user.getId()));
-
-        return dataResult;
+        return userService.addUser(userForm.getUser());
     }
 
     @RequestMapping(value = "/{loginId}", method = {RequestMethod.POST, RequestMethod.PUT})
     BasicResult update(@PathVariable String loginId,
                        @Validated(UserForm.Update.class) UserForm userForm, BindingResult bindingResult) {
+        if (loginId != null) {
+            userForm.setLoginId(loginId);
+        }
+
         BasicResult result = getBasicResult(bindingResult);
         if (result.getStatus() == BasicResult.Status.ERROR) {
             return result;
         }
 
-        User user = userForm.getUser();
-        user.setLoginId(loginId);
-        int count = userService.updateUser(user);
-
-        if (count == 0) {
-            result.setStatus(BasicResult.Status.WARNING);
-            result.addMessage("対象データがありませんでした");
-        }
-
-        return result;
+        return userService.updateUser(userForm.getUser());
     }
 
     @RequestMapping(value = "/{loginId}", method = RequestMethod.DELETE)
     BasicResult delete(@PathVariable String loginId) {
-        BasicResult result = getBasicResult();
-        int count = userService.deleteUser(loginId);
-
-        if (count == 0) {
-            result.setStatus(BasicResult.Status.WARNING);
-            result.addMessage("対象データがありませんでした");
-        }
-        return result;
-    }
-
-    private BasicResult getBasicResult() {
-        return getBasicResult(null);
+        return userService.deleteUser(loginId);
     }
 
     private BasicResult getBasicResult(BindingResult bindingResult) {
@@ -99,10 +67,8 @@ public class UserController {
         if (bindingResult != null && bindingResult.hasErrors()) {
             result.setStatus(BasicResult.Status.ERROR);
             bindingResult.getAllErrors().forEach(s -> result.addMessage(s.getDefaultMessage()));
-            return result;
         }
 
         return result;
     }
-
 }

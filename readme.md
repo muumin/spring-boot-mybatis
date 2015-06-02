@@ -1,10 +1,16 @@
 Spring Boot + MyBatis3
 =====================================
 
-     gradlew
+     gradlew bootRun
 
 http://localhost:8080/users
 
+# テスト
+
+    gradlew 
+  
+  build/reports配下にテスト結果が出力される
+  
 # flyway
 
 起動時に自動でMigrateするがGradleで実行する場合は以下で可能。
