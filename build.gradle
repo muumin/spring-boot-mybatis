@@ -17,6 +17,9 @@ apply plugin: 'org.flywaydb.flyway'
 
 defaultTasks "clean", "build", "bootRun"
 
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
 def defaultEncoding = 'UTF-8'
 tasks.withType(AbstractCompile) each { it.options.encoding = defaultEncoding }
 tasks.withType(GroovyCompile) each { it.groovyOptions.encoding = defaultEncoding }
@@ -24,6 +27,22 @@ tasks.withType(GroovyCompile) each { it.groovyOptions.encoding = defaultEncoding
 project.ext {
     artifactId = 'mybatis-boot'
     springBootVersion = '1.2.3.RELEASE'
+    groovyAllVersion = '2.4.3'
+    spockVersion = '1.0-groovy-2.4'
+}
+
+configurations {
+    integTest.extendsFrom testRuntime
+    integTestCompile.extendsFrom testCompile
+}
+
+sourceSets {
+    integTest {
+        groovy.srcDir 'src/integTest/groovy'
+        resources.srcDir 'src/integTest/resources'
+        compileClasspath = sourceSets.main.output + sourceSets.test.output + configurations.integTest
+        runtimeClasspath = output + compileClasspath
+    }
 }
 
 repositories {
@@ -44,8 +63,12 @@ dependencies {
     compile 'org.projectlombok:lombok:1.14.8'
     compile 'org.apache.commons:commons-lang3:3.4'
 
-    testCompile 'org.codehaus.groovy:groovy-all:2.4.3'
-    testCompile 'org.spockframework:spock-core:1.0-groovy-2.4'
+    testCompile "org.codehaus.groovy:groovy-all:$groovyAllVersion"
+    testCompile "org.spockframework:spock-core:$spockVersion"
+    testCompile "org.spockframework:spock-spring:$spockVersion"
+    testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
+
+    integTest 'com.github.groovy-wslite:groovy-wslite:1.0.0'
 }
 
 task wrapper(type: Wrapper) { gradleVersion = '2.4' }
@@ -64,6 +87,19 @@ eclipse {
     }
 }
 
+idea {
+    module {
+        scopes.TEST.plus += [configurations.integTest]
+    }
+}
+
 flyway {
     url = 'jdbc:hsqldb:file:db/test'
 }
+
+task integTest(type: Test) {
+    testClassesDir = sourceSets.integTest.output.classesDir
+    classpath = sourceSets.integTest.runtimeClasspath
+}
+
+check.dependsOn integTest

@@ -21,7 +21,7 @@ public class UserForm implements Serializable {
 
     @NotNull(groups = Insert.class, message = "loginIdは必須です")
     @Pattern(regexp = "^[a-zA-Z0-9]*$", groups = {Insert.class, Update.class}, message = "loginIdは英数字です")
-    @Length(max = 100, groups = {Insert.class}, message = "loginIdは{max}以下です")
+    @Length(min=1,max = 100, groups = {Insert.class}, message = "loginIdは{min}以上{max}以下です")
     private String loginId;
 
     @NotNull(groups = Insert.class, message = "passwordは必須です")
@@ -30,11 +30,11 @@ public class UserForm implements Serializable {
     private String password;
 
     @NotNull(groups = Insert.class, message = "nameは必須です")
-    @Length(max = 100, groups = {Insert.class, Update.class}, message = "nameは{max}以下です")
+    @Length(min=1, max = 100, groups = {Insert.class, Update.class}, message = "nameは{min}以上{max}以下です")
     private String name;
 
     @NotNull(groups = Insert.class, message = "mailは必須です")
-    @Length(max = 100, groups = {Insert.class, Update.class}, message = "mailは{max}以下です")
+    @Length(min=1, max = 100, groups = {Insert.class, Update.class}, message = "mailは{min}以上{max}以下です")
     @Email(groups = {Insert.class, Update.class}, message = "mailのフォーマットが不正です")
     private String mail;
 

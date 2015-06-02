@@ -1,5 +1,7 @@
 package example.mybatis.enums;
 
+import java.util.stream.Stream;
+
 /**
  * これは01から11、99など間の抜けた業務コードのパターンを想定。<br />
  * 0から付け加えるだけならenumだけでTypeHandlerも作成不要。
@@ -19,11 +21,9 @@ public enum UserType {
     }
 
     public static UserType fromCode(String code) {
-        for (UserType ut : UserType.values()) {
-            if (ut.code.equals(code)) {
-                return ut;
-            }
-        }
-        throw new IllegalArgumentException("code = " + code);
+        return Stream.of(UserType.values())
+                .filter(ut -> ut.code.equals(code))
+                .findFirst()
+                .orElse(null);
     }
 }

@@ -3,6 +3,7 @@ package example.web;
 import example.mybatis.domain.User;
 import example.service.UserService;
 import example.web.form.UserForm;
+import example.web.result.BasicDataResult;
 import example.web.result.BasicResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,11 +47,14 @@ public class UserController {
         if (result.getStatus() == BasicResult.Status.ERROR) {
             return result;
         }
+
         User user = userForm.getUser();
         userService.addUser(user);
-        result.addMessage(String.format("id:%d", user.getId()));
+        BasicDataResult<User> dataResult = new BasicDataResult<>();
+        dataResult.setData(user);
+        dataResult.addMessage(String.format("id:%d", user.getId()));
 
-        return result;
+        return dataResult;
     }
 
     @RequestMapping(value = "/{loginId}", method = {RequestMethod.POST, RequestMethod.PUT})
