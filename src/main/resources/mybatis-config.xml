@@ -3,10 +3,20 @@
         PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-config.dtd">
 <configuration>
-    <!-- USER_NAMEのカラム名をuserNameとしてオブジェクトにマッピングする設定 -->
+    <!-- USER_NAME(スネークケース)のカラム名をuserName(ローワーキャメルケース )としてオブジェクトにマッピングする設定 -->
     <settings>
         <setting name="mapUnderscoreToCamelCase" value="true"/>
     </settings>
+
+    <!--
+        以下のEnumを定義してEnumOrdinalTypeHandlerを指定するとADMINから0,1,2の業務コードとしてDBに保存される
+        public enum UserType {ADMIN,USER,ANONYMOUS}
+    -->
+    <!--<typeHandlers>-->
+    <!--<typeHandler handler="org.apache.ibatis.type.EnumOrdinalTypeHandler"-->
+    <!--javaType="example.mybatis.enums.UserType"/>-->
+    <!--</typeHandlers>-->
+
     <!-- handler一括読み込み -->
     <typeHandlers>
         <package name="example.mybatis.handler"/>
