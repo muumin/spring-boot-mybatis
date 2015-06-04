@@ -35,11 +35,11 @@ public class UserServiceImpl implements UserService {
             BasicResult ret = new BasicResult();
             ret.setStatus(BasicResult.Status.ERROR);
             return ret;
-        } else {
-            BasicDataResult<User> ret = new BasicDataResult<>();
-            ret.setData(user);
-            return ret;
         }
+
+        BasicDataResult<User> ret = new BasicDataResult<>();
+        ret.setData(user);
+        return ret;
     }
 
     @Override
@@ -73,12 +73,17 @@ public class UserServiceImpl implements UserService {
     public BasicResult updateUser(User user) {
         int count = userMapper.update(user);
 
-        BasicDataResult<User> dataResult = new BasicDataResult<>();
-        dataResult.setData(user);
         if (count == 0) {
-            dataResult.setStatus(BasicResult.Status.WARNING);
-            dataResult.addMessage("対象データがありませんでした");
+            BasicResult basicResult = new BasicResult();
+            basicResult.setStatus(BasicResult.Status.WARNING);
+            basicResult.addMessage("対象データがありませんでした");
+            return basicResult;
         }
+
+        BasicDataResult<User> dataResult = new BasicDataResult<>();
+        User updateUser = userMapper.selectOne(user.getLoginId());
+        dataResult.setData(updateUser);
+
         return dataResult;
     }
 }

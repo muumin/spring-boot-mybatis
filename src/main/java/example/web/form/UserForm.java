@@ -2,11 +2,11 @@ package example.web.form;
 
 import example.mybatis.domain.User;
 import example.mybatis.enums.UserType;
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Builder;
-import org.apache.commons.lang3.StringUtils;
+import lombok.Builder;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -18,7 +18,7 @@ import javax.validation.constraints.Pattern;
 @Data
 @Builder
 @NoArgsConstructor
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PACKAGE)
 public class UserForm implements Serializable {
     public interface Insert {
     }
@@ -50,16 +50,10 @@ public class UserForm implements Serializable {
     private String userType;
 
     public User getUser() {
-        User user = new User();
-
-        user.setLoginId(loginId);
-        user.setEncodedPassword(password);
-        user.setName(name);
-        user.setMailAddress(mail);
-        if (!StringUtils.isEmpty(userType)) {
-            user.setUserType(UserType.fromCode(userType));
-        }
-
-        return user;
+        return User.builder().loginId(loginId)
+                .encodedPassword(password)
+                .name(name).mailAddress(mail)
+                .userType(UserType.fromCode(userType))
+                .build();
     }
 }

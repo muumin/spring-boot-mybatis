@@ -40,14 +40,13 @@ dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-aop:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
-    compile "org.springframework.boot:spring-boot-starter-actuator:$springBootVersion"
 
     compile 'org.mybatis:mybatis:3.2.8'
     compile 'org.mybatis:mybatis-spring:1.2.2'
     compile 'org.flywaydb:flyway-core:3.2.1'
     runtime 'org.hsqldb:hsqldb:2.3.2'
 
-    compile 'org.projectlombok:lombok:1.14.8'
+    compile 'org.projectlombok:lombok:1.16.4'
     compile 'org.apache.commons:commons-lang3:3.4'
 
     testCompile "org.codehaus.groovy:groovy-all:$groovyAllVersion"

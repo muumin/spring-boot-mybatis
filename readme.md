@@ -3,13 +3,15 @@ Spring Boot + MyBatis3
 
      gradlew bootRun
 
-http://localhost:8080/users
+http://localhost:8080/users/
+
+POST/GET/DELETE/PUTでCRUD操作が可能。
 
 # テスト
 
     gradlew 
   
-  build/reports配下にテスト結果が出力される
+build/reports配下にテスト結果が出力される
   
 # flyway
 
@@ -31,6 +33,11 @@ http://localhost:8080/users
 
     gradlew flywayClean
 
+# Windowsでのテスト失敗
+
+gradlew.batのDEFAULT_JVM_OPTSを以下にする
+
+    set DEFAULT_JVM_OPTS="-Dfile.encoding=UTF-8"
 
 # 参考サイト
 

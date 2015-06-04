@@ -38,12 +38,15 @@ public class UserController {
         if (result.getStatus() == BasicResult.Status.ERROR) {
             return result;
         }
+
         return userService.addUser(userForm.getUser());
     }
 
     @RequestMapping(value = "/{loginId}", method = {RequestMethod.POST, RequestMethod.PUT})
     BasicResult update(@PathVariable String loginId,
-                       @Validated(UserForm.Update.class) UserForm userForm, BindingResult bindingResult) {
+                       @Validated(UserForm.Update.class) UserForm userForm,
+                       BindingResult bindingResult) {
+        log.debug(userForm.toString());
         if (loginId != null) {
             userForm.setLoginId(loginId);
         }

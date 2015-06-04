@@ -28,7 +28,7 @@ public interface UserMapper {
     User selectOne(String id);
 
     @SelectProvider(type = UsersProvider.class, method = "selectIn")
-    // @Paramの場合ProviderにはMap<String, Object>の引数として渡される
+        // @Paramの場合ProviderにはMap<String, Object>の引数として渡される
     List<User> selectIn(@Param("list") List<Integer> list);
 
     @InsertProvider(type = UsersProvider.class, method = "insert")

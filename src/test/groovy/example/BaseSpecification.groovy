@@ -13,6 +13,7 @@ import wslite.rest.RESTClient
 @ActiveProfiles("integration")
 abstract class BaseSpecification extends Specification {
     def getRestClient() {
-        return new RESTClient("http://localhost:7777")
+        def client = new RESTClient("http://localhost:7777")
+        return client
     }
 }
