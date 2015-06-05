@@ -1,4 +1,4 @@
-package example.monitor
+package example.aop.monitor
 
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.Signature
@@ -13,17 +13,17 @@ class ServiceMonitorTest extends Specification {
         setup:
         def logger = Mock(Logger) {
             1 * isDebugEnabled() >> true
-            1 * debug("Completed: {}.{} : {}ms", 'example.monitor.ServiceMonitor', 'Test', _)
+            1 * debug("Completed: {}.{} : {}ms", 'example.aop.monitor.ServiceMonitor', 'Test', _)
         }
 
         def monitor = new ServiceMonitor()
 
         // private static finalを書き換え可能にする
-        def field = ServiceMonitor.class.getDeclaredField("log");
-        field.setAccessible(true);
-        def modifiers = Field.class.getDeclaredField("modifiers");
-        modifiers.setAccessible(true);
-        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL);
+        def field = ServiceMonitor.class.getDeclaredField("log")
+        field.setAccessible(true)
+        def modifiers = Field.class.getDeclaredField("modifiers")
+        modifiers.setAccessible(true)
+        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL)
         field.set(monitor, logger)
 
         def point = Mock(ProceedingJoinPoint) {
