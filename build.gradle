@@ -1,7 +1,7 @@
 buildscript {
     repositories { jcenter() }
     dependencies {
-        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.3.RELEASE"
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:1.2.4.RELEASE"
         classpath 'org.springframework:springloaded:1.2.3.RELEASE'
         classpath 'org.hsqldb:hsqldb:2.3.2'
         classpath 'org.flywaydb:flyway-gradle-plugin:3.2.1'
@@ -27,7 +27,7 @@ tasks.withType(GroovyCompile) each { it.groovyOptions.encoding = defaultEncoding
 
 project.ext {
     artifactId = 'mybatis-boot'
-    springBootVersion = '1.2.3.RELEASE'
+    springBootVersion = '1.2.4.RELEASE'
     groovyAllVersion = '2.4.3'
     spockVersion = '1.0-groovy-2.4'
 }
@@ -38,7 +38,6 @@ repositories {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
-    compile "org.springframework.boot:spring-boot-starter-aop:$springBootVersion"
     compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
 
     compile 'org.mybatis:mybatis:3.2.8'
@@ -55,6 +54,7 @@ dependencies {
     testCompile "org.springframework.boot:spring-boot-starter-test:$springBootVersion"
 
     testCompile 'com.github.groovy-wslite:groovy-wslite:1.0.0'
+    testCompile 'cglib:cglib-nodep:3.1'
 }
 
 task wrapper(type: Wrapper) { gradleVersion = '2.4' }

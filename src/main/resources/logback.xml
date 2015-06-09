@@ -22,8 +22,10 @@
         <!-- スタックトレースをSyslogに送らない -->
         <throwableExcluded>true</throwableExcluded>
     </appender>
-    <root>
-        <level value="INFO"/>
+
+    <logger name="example" level="DEBUG" />
+
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="FILE"/>
     </root>

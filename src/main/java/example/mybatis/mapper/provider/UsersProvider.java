@@ -27,11 +27,11 @@ public class UsersProvider {
         }}.toString();
     }
 
-    public String select(final String id) {
+    public String find(final String loginId) {
         return new SQL() {{
             SELECT("*");
             FROM(TABLE_NAME);
-            if (!StringUtils.isEmpty(id)) {
+            if (!StringUtils.isEmpty(loginId)) {
                 WHERE("LOGIN_ID = #{id}");
                 // 条件を追加すると
                 // WHERE("LOGIN_ID = #{id}");
@@ -64,12 +64,13 @@ public class UsersProvider {
             SET("UPDATED = CURRENT_TIMESTAMP");
 
             WHERE("LOGIN_ID = #{loginId}");
+            WHERE("VERSION = #{version}");
         }}.toString();
     }
 
     // IN句だと面倒だがこんな感じ？
     @SuppressWarnings("unchecked")
-    public String selectIn(Map<String, Object> map) {
+    public String findIn(Map<String, Object> map) {
         List<Integer> list = (List<Integer>) map.get("list");
         StringJoiner joiner = new StringJoiner(",", "(", ")");
         list.forEach(s -> joiner.add(s.toString()));

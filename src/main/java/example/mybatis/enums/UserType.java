@@ -25,6 +25,6 @@ public enum UserType {
         return Stream.of(UserType.values())
                 .filter(ut -> ut.code.equals(code))
                 .findFirst()
-                .orElse(null);
+                .orElseThrow(IllegalArgumentException::new);
     }
 }

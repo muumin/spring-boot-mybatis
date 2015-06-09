@@ -13,11 +13,10 @@ class UserServiceImplTest extends BaseSpecification {
     @Unroll
     def "getUser() loginId = #loginId"() {
         when:
-        BasicDataResult<User> ret = (BasicDataResult<User>) service.getUser(loginId)
-        User user = ret.getData()
+        User user = service.getUser(loginId)
 
         then:
-        user.getName() == name
+        user.name == name
 
         where:
         // @formatter:off

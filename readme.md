@@ -1,6 +1,26 @@
 Spring Boot + MyBatis3
 =====================================
 
+# 概要
+
+* SpringBootでRESTを作成
+* レガシーなDBとの戦に備えて
+    * ORマッパーにMyBatis
+    * DBマイグレーションにFlyway
+* テスト時にSpringBootを起動してRESTをテスト
+    * テスト実行毎にDBをFlywayで初期化
+
+# library
+
+* SpringBoot
+* MyBatis
+* Lombok
+* Flyway
+* spock + groovy
+* jacoco
+
+# 起動
+
      gradlew bootRun
 
 http://localhost:8080/users/
@@ -11,11 +31,9 @@ POST/GET/DELETE/PUTでCRUD操作が可能。
 
     gradlew 
   
-build/reports配下にテスト結果が出力される
+build/reports配下にテスト結果が出力される(でもカバレッジは100%じゃないっす)
   
-# flyway
-
-起動時に自動でMigrateするがGradleで実行する場合は以下で可能。
+# flywayコマンド
 
 ## DB差分反映
 
@@ -51,4 +69,6 @@ gradlew.batのDEFAULT_JVM_OPTSを以下にする
 
 # 書籍
 
-Java Persistence with MyBatis 3
+[Java Persistence with MyBatis 3](http://www.amazon.co.jp/dp/B00DIY89P8)
+
+[はじめてのSpring Boot](http://www.amazon.co.jp/dp/4777518655)

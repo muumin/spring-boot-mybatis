@@ -35,5 +35,5 @@ public class User implements Serializable {
 
     private LocalDateTime updated;
 
-    private int version;
+    private Integer version;
 }

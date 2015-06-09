@@ -3,14 +3,16 @@ package example.service;
 import example.mybatis.domain.User;
 import example.web.result.BasicResult;
 
+import java.util.List;
+
 public interface UserService {
-    BasicResult getUsers();
+    List<User> getUsers();
 
-    BasicResult getUser(String id);
+    User getUser(String loginId);
 
-    BasicResult deleteUser(String id);
+    void deleteUser(String loginId);
 
-    BasicResult addUser(User user);
+    User addUser(User user);
 
-    BasicResult updateUser(User user);
+    User updateUser(User user);
 }

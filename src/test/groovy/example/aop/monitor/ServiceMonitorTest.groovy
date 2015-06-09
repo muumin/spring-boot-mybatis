@@ -1,12 +1,10 @@
 package example.aop.monitor
 
+import example.LombokCoverage
 import org.aspectj.lang.ProceedingJoinPoint
 import org.aspectj.lang.Signature
 import org.slf4j.Logger
 import spock.lang.Specification
-
-import java.lang.reflect.Field
-import java.lang.reflect.Modifier
 
 class ServiceMonitorTest extends Specification {
     void "logServiceAccess(ProceedingJoinPoint)"() {
@@ -17,14 +15,7 @@ class ServiceMonitorTest extends Specification {
         }
 
         def monitor = new ServiceMonitor()
-
-        // private static finalを書き換え可能にする
-        def field = ServiceMonitor.class.getDeclaredField("log")
-        field.setAccessible(true)
-        def modifiers = Field.class.getDeclaredField("modifiers")
-        modifiers.setAccessible(true)
-        modifiers.setInt(field, field.getModifiers() & ~Modifier.FINAL)
-        field.set(monitor, logger)
+        new LombokCoverage<ServiceMonitor>().setMockLogger(monitor, logger)
 
         def point = Mock(ProceedingJoinPoint) {
             proceed() >> "OK"

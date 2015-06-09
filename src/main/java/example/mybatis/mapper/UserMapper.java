@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface UserMapper {
 
-    @SelectProvider(type = UsersProvider.class, method = "select")
+    @SelectProvider(type = UsersProvider.class, method = "find")
         // Mapper.xmlに定義したresultMapを使用する場合
 //    @ResultMap("UserResult")
         // annotationで指定する場合
@@ -22,14 +22,14 @@ public interface UserMapper {
 //            @Result(property="loginId", column="LOGIN_ID"),
 //            @Result(property="encodedPassword", column="ENCODED_PASSWORD")
 //    })
-    List<User> selectAll();
+    List<User> find();
 
-    @SelectProvider(type = UsersProvider.class, method = "select")
-    User selectOne(String id);
+    @SelectProvider(type = UsersProvider.class, method = "find")
+    User findById(String loginId);
 
-    @SelectProvider(type = UsersProvider.class, method = "selectIn")
+    @SelectProvider(type = UsersProvider.class, method = "findIn")
         // @Paramの場合ProviderにはMap<String, Object>の引数として渡される
-    List<User> selectIn(@Param("list") List<Integer> list);
+    List<User> findIn(@Param("list") List<Integer> list);
 
     @InsertProvider(type = UsersProvider.class, method = "insert")
     // 以下のannotationでinsert後のid(IDENTITY)がObjectに設定される
@@ -37,8 +37,8 @@ public interface UserMapper {
     int insert(User user);
 
     // 単純なSQLならannotationに直接定義可能。他に@Selectや@Insertなどがある
-    @Delete("DELETE FROM USERS WHERE LOGIN_ID=#{id}")
-    int delete(String id);
+    @Delete("DELETE FROM USERS WHERE LOGIN_ID=#{loginId} AND VERSION = #{version}")
+    int delete(User user);
 
     @UpdateProvider(type = UsersProvider.class, method = "update")
     int update(User user);

@@ -12,6 +12,7 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import java.io.Serializable;
+import java.util.Optional;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
@@ -49,12 +50,16 @@ public class UserForm implements Serializable {
     @UserType(groups = {Insert.class, Update.class})
     private String userType;
 
+    @Pattern(regexp = "^[0-9]*$", groups = {Update.class}, message = "versionは数字です")
+    private String version;
+
     public User getUser() {
         User.UserBuilder useBuilder = User.builder().
                 loginId(loginId)
                 .encodedPassword(password)
                 .name(name)
-                .mailAddress(mail);
+                .mailAddress(mail)
+                .version(Optional.ofNullable(version).map(Integer::parseInt).orElse(null));
         if (userType != null) {
             useBuilder.userType(example.mybatis.enums.UserType.valueOf(userType));
         }

@@ -2,88 +2,61 @@ package example.service;
 
 import example.mybatis.domain.User;
 import example.mybatis.mapper.UserMapper;
-import example.web.result.BasicDataResult;
-import example.web.result.BasicResult;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
-import javax.transaction.Transactional;
+import java.util.Optional;
+import javax.persistence.EntityNotFoundException;
 
 @Service
 @Slf4j
+@Transactional
 public class UserServiceImpl implements UserService {
     @Autowired
     private UserMapper userMapper;
 
     @Override
-    public BasicResult getUsers() {
+    @Transactional(readOnly = true)
+    public List<User> getUsers() {
         // IN句のサンプル
-        userMapper.selectIn(Arrays.asList(1, 2)).forEach(s -> log.debug("SELECT * FROM USERS WHERE (ID IN ?):{}", s));
+        userMapper.findIn(Arrays.asList(1, 2)).forEach(s -> log.debug("SELECT * FROM USERS WHERE (ID IN ?):{}", s));
 
-        BasicDataResult<List<User>> ret = new BasicDataResult<>();
-        ret.setData(userMapper.selectAll());
-        return ret;
+        return userMapper.find();
     }
 
     @Override
-    public BasicResult getUser(String id) {
-        User user = userMapper.selectOne(id);
-        if (user == null) {
-            BasicResult ret = new BasicResult();
-            ret.setStatus(BasicResult.Status.ERROR);
-            return ret;
-        }
-
-        BasicDataResult<User> ret = new BasicDataResult<>();
-        ret.setData(user);
-        return ret;
+    @Transactional(readOnly = true)
+    public User getUser(String loginId) {
+        return Optional.ofNullable(userMapper.findById(loginId)).orElseThrow(EntityNotFoundException::new);
     }
 
     @Override
-    @Transactional
-    public BasicResult deleteUser(String id) {
-        BasicResult result = new BasicResult();
-        int count = userMapper.delete(id);
-
-        if (count == 0) {
-            result.setStatus(BasicResult.Status.WARNING);
-            result.addMessage("対象データがありませんでした");
-        }
-
-        return result;
+    public void deleteUser(String loginId) {
+        Optional<User> user = Optional.ofNullable(userMapper.findById(loginId));
+        userMapper.delete(user.orElseThrow(EntityNotFoundException::new));
     }
 
     @Override
-    @Transactional
-    public BasicResult addUser(User user) {
+    public User addUser(User user) {
         userMapper.insert(user);
-
-        BasicDataResult<User> dataResult = new BasicDataResult<>();
-        dataResult.setData(user);
-        dataResult.addMessage(String.format("id:%d", user.getId()));
-
-        return dataResult;
+        return user;
     }
 
     @Override
-    @Transactional
-    public BasicResult updateUser(User user) {
-        int count = userMapper.update(user);
-
-        if (count == 0) {
-            BasicResult basicResult = new BasicResult();
-            basicResult.setStatus(BasicResult.Status.WARNING);
-            basicResult.addMessage("対象データがありませんでした");
-            return basicResult;
+    public User updateUser(User user) {
+        if (user.getVersion() == null) {
+            user.setVersion(Optional.ofNullable(userMapper.findById(user.getLoginId())).map(User::getVersion).orElseThrow(EntityNotFoundException::new));
         }
 
-        BasicDataResult<User> dataResult = new BasicDataResult<>();
-        User updateUser = userMapper.selectOne(user.getLoginId());
-        dataResult.setData(updateUser);
+        if (userMapper.update(user) == 0) {
+            throw new ObjectOptimisticLockingFailureException(User.class, user);
+        }
 
-        return dataResult;
+        return userMapper.findById(user.getLoginId());
     }
 }
