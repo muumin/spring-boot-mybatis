@@ -46,7 +46,6 @@ public class UserController {
     BasicResult update(@PathVariable String loginId,
                        @Validated(UserForm.Update.class) UserForm userForm,
                        BindingResult bindingResult) {
-        log.debug(userForm.toString());
         if (loginId != null) {
             userForm.setLoginId(loginId);
         }

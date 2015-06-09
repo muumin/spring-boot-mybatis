@@ -1,12 +1,12 @@
 package example.web.form;
 
 import example.mybatis.domain.User;
-import example.mybatis.enums.UserType;
+import example.web.validation.UserType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Builder;
 import org.hibernate.validator.constraints.Email;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
@@ -46,14 +46,19 @@ public class UserForm implements Serializable {
     private String mail;
 
     @NotNull(groups = Insert.class, message = "userTypeは必須です")
-    @Pattern(regexp = "^(8|12)$", groups = {Insert.class, Update.class}, message = "userTypeは8か12です")
+    @UserType(groups = {Insert.class, Update.class})
     private String userType;
 
     public User getUser() {
-        return User.builder().loginId(loginId)
+        User.UserBuilder useBuilder = User.builder().
+                loginId(loginId)
                 .encodedPassword(password)
-                .name(name).mailAddress(mail)
-                .userType(UserType.fromCode(userType))
-                .build();
+                .name(name)
+                .mailAddress(mail);
+        if (userType != null) {
+            useBuilder.userType(example.mybatis.enums.UserType.valueOf(userType));
+        }
+
+        return useBuilder.build();
     }
 }

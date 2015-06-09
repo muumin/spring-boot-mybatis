@@ -14,7 +14,7 @@ class UserFormTest extends Specification {
             .password("password")
             .name("name")
             .mail("mail@example.com")
-            .userType("8").build()
+            .userType("ADMIN").build()
 
     @Unroll
     def "loginIdが#commentのvalidationテスト"() {

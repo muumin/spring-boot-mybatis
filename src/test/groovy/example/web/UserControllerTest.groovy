@@ -31,7 +31,7 @@ class UserControllerTest extends BaseSpecification {
 
     def "create() のテスト"() {
         setup:
-        def query = [mail: 'test@example.com', loginId: 'USER1', name: '山田健治', password: 'USER1', userType: '8']
+        def query = [mail:'test@example.com', loginId:'USER1', name:'山田健治', password:'USER1', userType:'ADMIN']
 
         when:
         def response = getRestClient().post(path: "/users/", query: query, {})
@@ -53,7 +53,7 @@ class UserControllerTest extends BaseSpecification {
 
     def "update() のテスト"() {
         setup:
-        def query = [name: '鈴木健治']
+        def query = [name:'鈴木健治']
 
         when:
         def response = getRestClient().put(path: "/users/USER1", query: query, {})
