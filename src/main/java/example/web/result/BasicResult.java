@@ -1,5 +1,6 @@
 package example.web.result;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL) // nullの項目は非表示
 public class BasicResult {
     public enum Status {
         SUCCESS, WARNING, ERROR
