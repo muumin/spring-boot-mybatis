@@ -17,5 +17,5 @@ spring:
 #    min-idle: 20
 #    initial-size: 20
     # コネクションタイムアウト対応
-    testOnBorrow: true
-    validationQuery: SELECT 1
+#    testOnBorrow: true
+#    validationQuery: SELECT 1

@@ -30,9 +30,6 @@ public class UserController {
     @RequestMapping(value = "/{loginId}", method = RequestMethod.GET)
     BasicResult read(@PathVariable String loginId) {
         return new BasicDataResult<>(userService.getUser(loginId));
-        // 日付をLocalDateTimeで整形したいなら以下
-//            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss.SSS");
-//            log.debug("{}.create={}", user.getLoginId(), user.getCreated().format(formatter));
     }
 
     @RequestMapping(value = "/", method = RequestMethod.POST)
@@ -49,7 +46,7 @@ public class UserController {
     BasicResult update(@PathVariable Optional<String> loginId,
                        @Validated(UserForm.Update.class) UserForm userForm,
                        BindingResult bindingResult) {
-        // Form > @PathVariableのようなので一回セット
+        // TODO:Form > @PathVariableのようなので一回セット
         loginId.ifPresent(userForm::setLoginId);
 
         BasicResult result = new BasicResult(bindingResult);
