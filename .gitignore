@@ -5,6 +5,6 @@
 /*.ipr
 /*.iws
 build
-db
-logs
+/db
+/logs
 test.groovy
