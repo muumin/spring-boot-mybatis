@@ -1,9 +1,13 @@
+import com.bmuschko.gradle.cargo.convention.Deployable
+import com.bmuschko.gradle.cargo.tasks.remote.CargoRedeployRemote
+
 buildscript {
     repositories { jcenter() }
     dependencies {
         classpath "org.springframework.boot:spring-boot-gradle-plugin:1.4.0.RELEASE"
         classpath 'org.hsqldb:hsqldb:2.3.2'
         classpath 'org.flywaydb:flyway-gradle-plugin:3.2.1'
+        classpath 'com.bmuschko:gradle-cargo-plugin:2.2.2'
     }
 }
 
@@ -14,6 +18,8 @@ apply plugin: 'eclipse-wtp'
 apply plugin: 'spring-boot'
 apply plugin: 'org.flywaydb.flyway'
 apply plugin: 'jacoco'
+apply plugin: 'war'
+apply plugin: 'com.bmuschko.cargo-base'
 
 defaultTasks "clean", "build", "jacocoTestReport"
 
@@ -37,6 +43,8 @@ repositories {
 
 dependencies {
     compile "org.springframework.boot:spring-boot-starter-web:$springBootVersion"
+    providedRuntime("org.springframework.boot:spring-boot-starter-tomcat:$springBootVersion")
+
     compile "org.springframework.boot:spring-boot-starter-data-jpa:$springBootVersion"
 
     compile 'org.mybatis:mybatis:3.2.8'
@@ -96,4 +104,21 @@ bootRun {
     if (project.hasProperty('args')) {
         args project.args.split('\\s+')
     }
+}
+
+gradle.projectsEvaluated {
+    tasks.withType(JavaCompile) {
+        options.compilerArgs << "-Xlint:deprecation"
+    }
+}
+
+task deploy(type: CargoRedeployRemote) {
+  containerId = 'tomcat8x'
+  hostname = '192.168.33.10'
+  port = 8080
+  username = 'admin'
+  password = 'admin'
+
+  def warFile = file('build/libs/spring-boot-mybatis.war')
+  deployables = [new Deployable(file: warFile, context: 'example')]
 }
