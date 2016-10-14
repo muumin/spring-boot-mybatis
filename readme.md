@@ -1,6 +1,16 @@
 Spring Boot + MyBatis3
 =====================================
 
+# Azure
+
+Azureの Application Insights にログを出力しようと試みた。
+
+だが現状出力されない。。。。
+
+[Java Web プロジェクトで Application Insights を使う](https://azure.microsoft.com/ja-jp/documentation/articles/app-insights-java-get-started/)
+
+[Application Insights を使用した Java トレース ログの探索](https://azure.microsoft.com/ja-jp/documentation/articles/app-insights-java-trace-logs/)
+
 # 概要
 
 * SpringBootでRESTを作成
@@ -29,10 +39,10 @@ POST/GET/DELETE/PUTでCRUD操作が可能。
 
 # テスト
 
-    gradlew 
-  
+    gradlew
+
 build/reports配下にテスト結果が出力される(でもカバレッジは100%じゃないっす)
-  
+
 # flywayコマンド
 
 ## DB差分反映
@@ -42,11 +52,11 @@ build/reports配下にテスト結果が出力される(でもカバレッジは
 ## DBバージョン確認
 
     gradlew flywayInfo
-    
+
 ## エラー修復
 
     gradlew flywayRepair
-    
+
 ## データ完全消去
 
     gradlew flywayClean
