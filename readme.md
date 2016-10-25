@@ -11,6 +11,45 @@ Azureの Application Insights にログを出力しようと試みた。
 
 [Application Insights を使用した Java トレース ログの探索](https://azure.microsoft.com/ja-jp/documentation/articles/app-insights-java-trace-logs/)
 
+## Gitを利用したwarのデプロイ手順
+
+1. リソースグループを選択
+1. 追加を選択
+1. 項目を入力する
+    1. リソースグループ名(適当)
+    1. サブスクリプション(そのまま)
+    1. リソースグループの場所(東日本)
+1. ポータル > App Service > 追加
+1. Web Appを選択して作成する
+1. 項目を入力する
+    1. アプリ名(適当)
+    1. リソースグループ(先に作成したリソースグループ)
+    1. プラン/場所(新規作成)
+        1. App Serviceプラン(適当)
+        1. 場所(japan east)
+        1. 価格レベル(安いプランはB1)
+    1. App Inights(オン)
+
+1. 作成したApplication Insightsを開く
+    1. プロパティにインストルメンテーション キーがあるのでコピーする
+    1. src/main/resources/ApplicationInsights.xmlのキーを書き換える
+    1. gradle clean warでwarファイルを作成する
+
+1. 作成したWeb Appを選択
+1. アプリケーション設定を開く
+    1. javaバージョン(java8)
+    1. プラットフォーム(64ビット)
+    1. 保存は下では無く左上にあるので注意
+1. デプロイオプションを選択
+1. ソースをローカルGitリポジトリを選択
+1. デプロイ資格情報で適当なID/パスワードで作成
+    1. 保存は下では無く左上にあるので注意
+1. プロパティを開く
+1. Git URLがあるのでclone
+1. build/libs/spring-boot-mybatis.warをcloneしたリポジトリのwebapps/ROOT.warとしてコピー
+1. commit & push
+1. http://{{ アプリ名 }}}.azurewebsites.net/users/ にアクセスする
+
 # 概要
 
 * SpringBootでRESTを作成

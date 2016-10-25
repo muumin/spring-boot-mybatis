@@ -22,11 +22,14 @@
         <!-- スタックトレースをSyslogに送らない -->
         <throwableExcluded>true</throwableExcluded>
     </appender>
+    <appender name="aiAppender" class="com.microsoft.applicationinsights.logback.ApplicationInsightsAppender">
+    </appender>
 
     <logger name="example" level="DEBUG" />
 
     <root level="INFO">
-        <appender-ref ref="STDOUT"/>
+        <!-- <appender-ref ref="STDOUT"/> -->
         <appender-ref ref="FILE"/>
+        <appender-ref ref="aiAppender" />
     </root>
 </configuration>
