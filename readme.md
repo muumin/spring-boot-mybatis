@@ -39,7 +39,7 @@ build/reports配下にテスト結果が出力される(でもカバレッジは
 
 ## deploy
 
-Tomcatに「<host name\>/example」としてデプロイされる。
+Tomcatに「{{host name}}/example」としてデプロイされる。
 
     gradle war deploy
 
@@ -63,7 +63,7 @@ Tomcatに「<host name\>/example」としてデプロイされる。
 
 # Windowsでのテスト失敗
 
-gradlew.batのDEFAULT_JVM_OPTSを以下にする
+gradlew.batのDEFAULT\_JVM\_OPTSを以下にする
 
     set DEFAULT_JVM_OPTS="-Dfile.encoding=UTF-8"
 
