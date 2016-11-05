@@ -67,7 +67,7 @@ dependencies {
     testCompile 'cglib:cglib-nodep:3.1'
 }
 
-task wrapper(type: Wrapper) { gradleVersion = '2.4' }
+task wrapper(type: Wrapper) { gradleVersion = '3.1' }
 
 eclipse {
     pathVariables GRADLE_REPO: file(System.properties['user.home'] + '/.gradle/cache')
