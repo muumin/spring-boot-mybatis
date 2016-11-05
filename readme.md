@@ -39,7 +39,7 @@ build/reports配下にテスト結果が出力される(でもカバレッジは
 
 ## deploy
 
-Tomcatに「<host name>/example」としてデプロイされる。
+Tomcatに「<host name\>/example」としてデプロイされる。
 
     gradle war deploy
 
