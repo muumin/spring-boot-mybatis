@@ -77,6 +77,8 @@ gradlew.batのDEFAULT\_JVM\_OPTSを以下にする
 
 [谷本 心 in せろ部屋](http://d.hatena.ne.jp/cero-t/20141212/1418339302)
 
+[Logbackでlogstash形式のログを出力し、fluentdでElasticsearchに転送する](http://blog.stormcat.io/entry/logback-logstash-fluentd)
+
 # 書籍
 
 [Java Persistence with MyBatis 3](http://www.amazon.co.jp/dp/B00DIY89P8)
