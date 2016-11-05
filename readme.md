@@ -1,7 +1,7 @@
 Spring Boot + MyBatis3
 =====================================
 
-# 概要
+## 概要
 
 * SpringBootでRESTを作成
 * レガシーなDBとの戦に備えて
@@ -10,7 +10,7 @@ Spring Boot + MyBatis3
 * テスト時にSpringBootを起動してRESTをテスト
     * テスト実行毎にDBをFlywayで初期化
 
-# library
+## library
 
 * SpringBoot
 * MyBatis
@@ -19,7 +19,7 @@ Spring Boot + MyBatis3
 * spock + groovy
 * jacoco
 
-# 起動
+## 起動
 
      gradlew bootRun
 
@@ -27,12 +27,22 @@ http://localhost:8080/users/
 
 POST/GET/DELETE/PUTでCRUD操作が可能。
 
-# テスト
+## テスト
 
-    gradlew 
-  
+    gradlew
+
 build/reports配下にテスト結果が出力される(でもカバレッジは100%じゃないっす)
-  
+
+## war作成
+
+    gradlew war
+
+## deploy
+
+Tomcatに「<host name>/example」としてデプロイされる。
+
+    gradle war deploy
+
 # flywayコマンド
 
 ## DB差分反映
@@ -42,11 +52,11 @@ build/reports配下にテスト結果が出力される(でもカバレッジは
 ## DBバージョン確認
 
     gradlew flywayInfo
-    
+
 ## エラー修復
 
     gradlew flywayRepair
-    
+
 ## データ完全消去
 
     gradlew flywayClean
